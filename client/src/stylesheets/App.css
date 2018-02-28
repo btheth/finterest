@@ -1,0 +1,178 @@
+.hidden {
+	display: none;
+}
+
+.disabled {
+	disabled: disabled;
+}
+
+#overlay {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.6;
+    filter: alpha(opacity=60);
+    z-index:9;
+}
+
+#add-box {
+	position: fixed;
+	z-index: 10;
+	left: 30%;
+	top: 15%;
+	width: 25%;
+	border: 2px solid black;
+	box-shadow: 6px 6px 5px black;
+	background-color: white;
+}
+
+#add-header {
+	background-color: gray;
+	height: 20px;
+	border-bottom: 2px solid black;
+	text-align: center;
+}
+
+.delete-btn-add-box {
+	float: right;
+	background-color: red;
+	color: white;
+	border: none;
+	height: 20px;
+	width: 20px;
+	padding: 2px;
+	text-align: center;
+	font-size: 10px;
+	border-left: 2px solid black;
+}
+
+
+#img-preview {
+	width: 80%;
+	height: auto;
+}
+
+.fin-wrapper {
+	display: inline-block;
+	width: 150px;
+	border: 1px solid black;
+	text-align: center;
+	vertical-align: top;
+	margin: 10px;
+	background-color: blue;
+	padding-bottom: 5px;
+}
+
+.delete-btn {
+	float: left;
+	background-color: red;
+	color: white;
+	border: none;
+	height: 20px;
+	width: 20px;
+	padding: 2px;
+	text-align: center;
+	font-size: 10px;
+	margin-bottom: 5px;
+	border: 2px solid black;
+}
+
+.fin-img-wrapper {
+	margin: 0px 10px 0px 10px;
+}
+
+.fin-img {
+	width: 100%;
+  	height: auto;
+  	margin: 0 auto;
+}
+
+.stat-wrapper {
+	margin: 5px 20px 5px 20px;
+}
+
+.like-span {
+	float: left;
+}
+
+.arrow-span {
+	float: right;
+}
+
+.arrow-img {
+	vertical-align: middle;
+	width: 15px;
+	height: auto;
+	margin-right: 5px;
+}
+
+.heart {
+  display: inline-block;
+  height: 10px;
+  margin: 0 5px;
+  position: relative;
+  top: 0;
+  transform: rotate(-45deg);
+  width: 10px;
+}
+
+.heart:before,
+.heart:after {
+  content: "";
+  background-color: inherit;
+  border-radius: 50%;
+  height: 10px;
+  position: absolute;
+  width: 10px;
+}
+
+.heart:before {
+  top: -5px;
+  left: 0;
+}
+
+.heart:after {
+  left: 5px;
+  top: 0;
+}
+
+.arrow {
+  border: 2px solid transparent;
+  border-top-color: black;
+  border-left-color: black;
+  border-bottom-color: black;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  position: relative;
+  -webkit-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  margin: 0 5px;
+  display: inline-block;
+}
+
+.arrow:before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 80%;
+  height: 0;
+  width: 0;
+  border-left: 5px solid black;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.arrow:hover {
+  -webkit-transform: rotate(315deg);
+  -ms-transform: rotate(315deg);
+  transform: rotate(315deg);
+  transition: all 0.8s;
+}
