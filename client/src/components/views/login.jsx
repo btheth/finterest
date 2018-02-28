@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Auth from '../../modules/Auth';
 import Header from './partials/header';
+import FacebookLoginButton from './partials/FacebookLoginButton';
 
 class Login extends Component {
 	constructor(props, context) {
@@ -80,6 +81,16 @@ class Login extends Component {
     });
   }
 
+  onFacebookLogin = (loginStatus, resultObject) => {
+    if (loginStatus === true) {
+      this.setState({
+        username: resultObject.user.name
+      });
+    } else {
+      alert('Facebook login error');
+    }
+  }
+
   render() {
     return (
       <div>
@@ -109,7 +120,11 @@ class Login extends Component {
 
           </form>
 
-          <button>Sign in with Facebook</button><button>Sign in with Twitter</button>
+          <FacebookLoginButton onLogin={this.onFacebookLogin}>
+            <button>Facebook</button>
+          </FacebookLoginButton>
+
+          <button>Sign in with Twitter</button>
 
           <div className="other-login-option">
             Need an account?
