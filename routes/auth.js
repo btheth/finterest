@@ -1,6 +1,8 @@
 const express = require('express');
 const validator = require('validator');
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
+const User = require('mongoose').model('users');
 
 const router = new express.Router();
 
@@ -157,6 +159,65 @@ router.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
+router.post('/facebook', (req, res, next) => {
+
+  const firstname = req.body.firstname;
+  const lastname = req.body.lastname || '0';
+  const fbId = req.body.fbId;
+
+  User.findOne({ fbId : fbId }, (err, user) => {
+
+    if (err) { return err; }
+
+    if (user) {
+      const payload = {
+        sub: user._id
+      };
+
+      const token = {token: jwt.sign(payload, process.env.JWTSECRET), id: user._id};
+      const userData = {
+        username: user.username
+      };
+
+      return res.json({
+        success: true,
+        message: 'You have successfully logged in!',
+        token,
+        user: userData
+      });
+
+    } else {
+      const newUser = new User();
+
+      newUser.fbId = fbId;
+      newUser.firstname = firstname
+      newUser.lastname = lastname;
+      newUser.username = firstname + lastname.substring(0,1) + (Math.floor(Math.random() * 10000) + 1);
+
+      newUser.save((err) => {
+        if (err) { return done(err); };
+        
+        const payload = {
+          sub: newUser._id
+        };
+        
+        // create a token string
+        const token = {token: jwt.sign(payload, process.env.JWTSECRET), id: newUser._id};
+
+        const userData = {
+          username: newUser.username
+        };
+
+        return res.json({
+          success: true,
+          message: 'You have successfully logged in!',
+          token,
+          user: userData
+        });
+      });
+    }
+  });
+})
 
 router.use((req,res) => {
   return res.status(400).json({

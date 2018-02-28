@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import Auth from '../../../modules/Auth';
 
 export default class FacebookLogin extends Component {
+  constructor(props, context) {
+    super(props, context);
+  }
 
   componentDidMount() {
     document.addEventListener('FBObjectReady', this.initializeFacebookLogin);
@@ -14,8 +18,10 @@ export default class FacebookLogin extends Component {
    * Init FB object and check Facebook Login status
    */
   initializeFacebookLogin = () => {
-    this.FB = window.FB;
-    this.checkLoginStatus();
+    if (!this.FB) {
+      this.FB = window.FB;
+      this.checkLoginStatus();
+    }
   }
 
   /**
@@ -29,7 +35,10 @@ export default class FacebookLogin extends Component {
    * Check login status and call login api is user is not logged in
    */
   facebookLogin = () => {
-    if (!this.FB) return;
+    console.log(this.FB);
+    if (!this.FB) {
+      this.initializeFacebookLogin();
+    }
 
     this.FB.getLoginStatus(response => {
       if (response.status === 'connected') {
@@ -50,7 +59,32 @@ export default class FacebookLogin extends Component {
           ...response,
           user: userData
         };
-        this.props.onLogin(true, result);
+
+        const firstname = encodeURIComponent(userData.name.split(' ')[0]);
+        const lastname = encodeURIComponent(userData.name.split(' ')[1]);
+        const fbId = encodeURIComponent(userData.id);
+        const formData = `firstname=${firstname}&lastname=${lastname}&fbId=${fbId}`;
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('post', '/auth/facebook');
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+          if (xhr.status === 200) {
+            // success
+            //console.log(xhr.response);
+
+            // save the token
+            Auth.authenticateUser(xhr.response.token);
+
+            this.props.onLogin(true, result);
+            this.props.history.push('/');
+          } else {
+            // failure
+            console.log('Error logging in with facebook')
+          }
+        });
+        xhr.send(formData);
       });
     } else {
       this.props.onLogin(false);

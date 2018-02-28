@@ -7,7 +7,6 @@ import FacebookLoginButton from './partials/FacebookLoginButton';
 class Login extends Component {
 	constructor(props, context) {
 		super(props, context);
-
     const storedMessage = localStorage.getItem('successMessage');
     let successMessage = '';
 
@@ -120,7 +119,7 @@ class Login extends Component {
 
           </form>
 
-          <FacebookLoginButton onLogin={this.onFacebookLogin}>
+          <FacebookLoginButton history={this.props.history} onLogin={this.onFacebookLogin}>
             <button>Facebook</button>
           </FacebookLoginButton>
 

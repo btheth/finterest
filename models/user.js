@@ -14,7 +14,7 @@ const UserSchema = new mongoose.Schema({
   password: String,
   firstname: String,
   lastname: String,
-  facebook: {id:String, token:String}
+  fbId: String
 });
 
 

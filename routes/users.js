@@ -56,8 +56,6 @@ router.post('/usersearch', function(req, res, next) {
 							}
 						}
 					}
-
-					console.log(results);
 					res.status(200).json(results);
 				});
 			}
