@@ -92,47 +92,46 @@ class Login extends Component {
 
   render() {
     return (
-      <div>
-      <Header />
-      <div id="login">
+      <div id="body-wrapper">
+        <Header />
+        <div id="login">
 
-        <div id="login-title-div">
-          <div id="login-title"><h1>Login</h1></div>
-        </div>
-
-        <div style={{"width":"500px", "margin":"0 auto"}}>
-          <form action="/" onSubmit={this.processForm}>
-
-            {this.state.errors.summary && <p className="error-bar">{this.state.errors.summary}</p>}
-        
-            <div className="form-group">
-              <label htmlFor="username">Username</label>
-              <input className="form-control" type="text" name="username" placeholder="Enter username" onChange={this.changeUser} value={this.state.user.username} />
-            </div>
-          
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input className="form-control" type="password" name="password" placeholder="Enter password" onChange={this.changeUser} value={this.state.user.password} />
-            </div>
-
-            <button className="btn btn-success" type="submit">Submit</button>
-
-          </form>
-
-          <FacebookLoginButton history={this.props.history} onLogin={this.onFacebookLogin}>
-            <button>Facebook</button>
-          </FacebookLoginButton>
-
-          <button>Sign in with Twitter</button>
-
-          <div className="other-login-option">
-            Need an account?
-            <br/>
-            <Link to={'/register'}><button className="btn btn-info btn-sm" type='button'>Register</button></Link>
+          <div id="title-div">
+            <h1 id="title-text">Login</h1>
           </div>
 
+          <div id="form-div">
+            <form action="/" onSubmit={this.processForm}>
+
+              {this.state.errors.summary && <p className="error-bar">{this.state.errors.summary}</p>}
+          
+              <div className="form-group">
+                <label htmlFor="username">Username</label>
+                <input className="form-control" type="text" name="username" placeholder="Enter username" onChange={this.changeUser} value={this.state.user.username} />
+              </div>
+            
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input className="form-control" type="password" name="password" placeholder="Enter password" onChange={this.changeUser} value={this.state.user.password} />
+              </div>
+
+              <button className="btn btn-success" type="submit">Submit</button>
+            </form>
+
+             <div id="fb-login">
+              <FacebookLoginButton history={this.props.history} onLogin={this.onFacebookLogin}>
+                <button className="btn btn-primary">Facebook Login</button>
+              </FacebookLoginButton>
+            </div>
+
+            <div className="other-login-option">
+              Need an account?
+              <br/>
+              <Link to={'/register'}><button className="btn btn-info btn-sm" type='button'>Register</button></Link>
+            </div>
+
+          </div>
         </div>
-      </div>
       </div>
     );
   }

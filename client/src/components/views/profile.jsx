@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import Auth from '../../modules/Auth';
 import Header from './partials/header';
+import Masonry from 'react-masonry-component';
+ 
+const masonryOptions = {
+    transitionDuration: 0
+};
 
 const brokenImg = "https://thumb1.shutterstock.com/display_pic_with_logo/2577385/254313409/stock-vector--error-with-red-empty-aquarium-concept-of-page-not-found-under-construction-http-error-254313409.jpg"
 
@@ -251,7 +256,7 @@ class Profile extends Component {
 
     render() {
         return (
-          <div>
+          <div id="body-wrapper">
             <Header />
             <div id='profile'>
 
@@ -262,48 +267,53 @@ class Profile extends Component {
                     New Fin
                     <button onClick={this.handleAddBox} type="text" className="delete-btn-add-box">&times;</button>
                 </div>
+                {this.state.addError ? <div className="error-bar">{this.state.addError}</div> : <div/>}
                 <div id="add-body">
-                    {this.state.addError ? <div id="add-error">{this.state.addError}</div> : <div/>}
                     Fin Title:
-                    <div id="title-box-div">
-                        <input value={this.state.titleValue} type="text" placeholder="Enter title..." onChange={this.handleTitleChange} />
+                    <div className="add-box-input">
+                        <input id="title-input" value={this.state.titleValue} type="text" placeholder="Enter title..." onChange={this.handleTitleChange} />
                     </div>
                     Image URL:
-                    <div id="url-box-div">
-                        <input value={this.state.imageValue} type="text" placeholder="Enter image url..." onChange={this.handleInputChange} />
-                        <button tabIndex="1" type="text" onClick={this.handleImgCheck}>Go!</button>
+                    <div className="add-box-input">
+                        <input id="img-input" value={this.state.imageValue} type="text" placeholder="Enter image url..." onChange={this.handleInputChange} />
+                        <button id="img-btn" className="btn btn-success btn-sm" tabIndex="1" type="text" onClick={this.handleImgCheck}>Go!</button>
                     </div>
                     <div id="img-preview-div">
                         {this.state.imageUrl ? <img onError={this.addDefaultSrc} alt="Preview of search" id="img-preview" src={this.state.imageUrl} /> : <div/>}
                     </div>
-                    <button onClick={this.handleAddFin} disabled={this.state.imageUrl === '' || this.state.imageTitle.trim() === ''}>Submit</button>
+                    <button id="add-submit" className="btn btn-success" onClick={this.handleAddFin} disabled={this.state.imageUrl === '' || this.state.imageTitle.trim() === ''}>Submit</button>
                 </div>
               </div>
 
               <div id="title-div">
-                <h1 id="title">My Fins</h1>
+                <h1 id="title-text">My Fins</h1>
               </div>
 
-              <div id="profile-body">
-                <button onClick={this.handleAddBox}>Add fin</button>
+              <div id="main-body">
+                <div id="add-btn-div">
+                    <button onClick={this.handleAddBox} className="btn btn-success add-btn">Add fin</button>
+                </div>
 
                 <div id="fin-body">
-                {this.state.fins.map((d,i) => 
-                    <div className="fin-wrapper">
-                        <div className="delete-btn-div"><button onClick={this.handleDeleteFin} data-id={i} className="delete-btn">&times;</button></div>
-                        <div className="fin-img-wrapper"><img onError={this.addDefaultSrc} alt={'Post from ' + d.username} className="fin-img" src={d.imageUrl}/></div>
-                        <div className="fin-title">{d.title}</div>
-                        <div className="stat-wrapper">
-                            <span className="like-span">
-                                <div onClick={this.handleHeartClick} data-id={i} style={{"background-color":(d.likes.indexOf(Auth.getId()) !== -1) ? "red" : "white"}} className="heart"/>
-                                {d.likes.length}
-                            </span>
-                            <span className="arrow-span">
-                                <div className="arrow"/>
-                                {d.refins.length}
-                            </span>
-                        </div>
-                    </div>)}
+                <Masonry className={'gallery-class'} elementType={'div'} options={masonryOptions}
+                    disableImagesLoaded={false} updateOnEachImageLoad={false}>
+                    {this.state.fins.map((d,i) => 
+                        <div className="image-element-class">
+                            <div className="delete-btn-div"><button onClick={this.handleDeleteFin} data-id={i} className="delete-btn">&times;</button></div>
+                            <div className="fin-img-wrapper"><img onError={this.addDefaultSrc} alt={'Post from ' + d.username} className="fin-img" src={d.imageUrl}/></div>
+                            <div className="fin-title">{d.title}</div>
+                            <div className="stat-wrapper">
+                                <span className="like-span">
+                                    <div onClick={this.handleHeartClick} data-id={i} style={{"background-color":(d.likes.indexOf(Auth.getId()) !== -1) ? "red" : "white"}} className="heart"/>
+                                    {d.likes.length}
+                                </span>
+                                <span className="arrow-span">
+                                    <div className="arrow"/>
+                                    {d.refins.length}
+                                </span>
+                            </div>
+                        </div>)}
+                    </Masonry>
                 </div>
               </div>
             

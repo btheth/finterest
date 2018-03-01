@@ -78,66 +78,66 @@ class Register extends Component {
 
   render() {
     return (
-      <div>
+      <div id="body-wrapper">
       <Header />
-      <div id="register">
+        <div id="register">
 
-        <div id="login-title-div">
-          <div id="login-title"><h1>Register</h1></div>
-        </div>
-
-        <div style={{"width":"500px", "margin":"0 auto"}}>
-          <form action="/" onSubmit={this.processForm}>
-
-            {this.state.errors.summary && <p className="error-bar">{this.state.errors.summary}</p>}
-
-            <div className="form-group">
-              <label htmlFor="firstname">First Name</label>
-              <input className="form-control" type="text" name="firstname" placeholder="Enter first name" onChange={this.changeUser} value={this.state.user.firstname} />
-              {this.state.errors.firstname && <p className="error-bar">{this.state.errors.firstname}</p>}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="lastname">Last Name</label>
-              <input className="form-control" type="text" name="lastname" placeholder="Enter last name" onChange={this.changeUser} value={this.state.user.lastname} />
-              {this.state.errors.lastname && <p className="error-bar">{this.state.errors.lastname}</p>}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="username">Username</label>
-              <input className="form-control" type="text" name="username" placeholder="Enter username" onChange={this.changeUser} value={this.state.user.username} />
-              {this.state.errors.username && <p className="error-bar">{this.state.errors.username}</p>}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input className="form-control" type="text" name="email" placeholder="Enter email" onChange={this.changeUser} value={this.state.user.email} />
-              {this.state.errors.email && <p className="error-bar">{this.state.errors.email}</p>}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="passone">Password</label>
-              <input className="form-control" type="password" name="passone" placeholder="Enter password" onChange={this.changeUser} value={this.state.user.passone} />
-              {this.state.errors.passone && <p className="error-bar">{this.state.errors.passone}</p>}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="passtwo">Confirm Password</label>
-              <input className="form-control" type="password" name="passtwo" placeholder="Confirm password" onChange={this.changeUser} value={this.state.user.passtwo} />
-              {this.state.errors.passtwo && <p className="error-bar">{this.state.errors.passtwo}</p>}
-            </div>
-
-            <button className="btn btn-success" type="submit">Submit</button>
-
-          </form>
-
-          <div className="other-login-option">
-            Have an account, Facebook, or Twitter?
-            <br/>
-            <Link to={'/login'}><button className="btn btn-info btn-sm" type='button'>Log In</button></Link>
+          <div id="title-div">
+            <h1 id="title-text">Register</h1>
           </div>
 
-        </div>
+          <div id="form-div">
+            <form action="/" onSubmit={this.processForm}>
+
+              {this.state.errors.summary && <p className="error-bar">{this.state.errors.summary}</p>}
+
+              <div className="form-group">
+                <label htmlFor="firstname">First Name</label>
+                <input className="form-control" type="text" name="firstname" placeholder="Enter first name" onChange={this.changeUser} value={this.state.user.firstname} />
+                {this.state.errors.firstname && <p className="error-bar">{this.state.errors.firstname}</p>}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="lastname">Last Name</label>
+                <input className="form-control" type="text" name="lastname" placeholder="Enter last name" onChange={this.changeUser} value={this.state.user.lastname} />
+                {this.state.errors.lastname && <p className="error-bar">{this.state.errors.lastname}</p>}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="username">Username</label>
+                <input className="form-control" type="text" name="username" placeholder="Enter username" onChange={this.changeUser} value={this.state.user.username} />
+                {this.state.errors.username && <p className="error-bar">{this.state.errors.username}</p>}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input className="form-control" type="text" name="email" placeholder="Enter email" onChange={this.changeUser} value={this.state.user.email} />
+                {this.state.errors.email && <p className="error-bar">{this.state.errors.email}</p>}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="passone">Password</label>
+                <input className="form-control" type="password" name="passone" placeholder="Enter password" onChange={this.changeUser} value={this.state.user.passone} />
+                {this.state.errors.passone && <p className="error-bar">{this.state.errors.passone}</p>}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="passtwo">Confirm Password</label>
+                <input className="form-control" type="password" name="passtwo" placeholder="Confirm password" onChange={this.changeUser} value={this.state.user.passtwo} />
+                {this.state.errors.passtwo && <p className="error-bar">{this.state.errors.passtwo}</p>}
+              </div>
+
+              <button className="btn btn-success" type="submit">Submit</button>
+
+            </form>
+
+            <div className="other-login-option">
+              Have an account with Finterest or Facebook?
+              <br/>
+              <Link to={'/login'}><button className="btn btn-info btn-sm" type='button'>Log In</button></Link>
+            </div>
+
+          </div>
         </div>
       </div>
     );

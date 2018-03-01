@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import Auth from '../../modules/Auth';
 import Header from './partials/header';
+import Masonry from 'react-masonry-component';
+ 
+const masonryOptions = {
+    transitionDuration: 0
+};
 
 const brokenImg = "https://thumb1.shutterstock.com/display_pic_with_logo/2577385/254313409/stock-vector--error-with-red-empty-aquarium-concept-of-page-not-found-under-construction-http-error-254313409.jpg"
 
@@ -169,19 +174,23 @@ class User extends Component {
 
     render() {
         return (
-          <div>
+          <div id="body-wrapper">
             <Header />
             <div id='user'>
 
               <div id="title-div">
-                <h1 id="title">{this.state.username ? this.state.username + " Fins" : (this.state.usererrors ? this.state.usererrors : "")}</h1>
+                <h1 id="title-text">{this.state.username ? this.state.username + " Fins" : (this.state.usererrors ? this.state.usererrors : "")}</h1>
               </div>
 
-              {this.state.finerrors ? this.state.finerrors : <div/>}
+              <div id="form-div">
+                {this.state.finerrors && <p className="error-bar">{this.state.finerrors}</p>}
+              </div>
 
-              <div id="user-body">
+              <div id="main-body">
+                <Masonry className={'gallery-class'} elementType={'div'} options={masonryOptions}
+                    disableImagesLoaded={false} updateOnEachImageLoad={false}>
                 {this.state.fins.map((d,i) => 
-                <div className="fin-wrapper">
+                <div className="image-element-class">
                     <div style={{"margin-top":"10px"}} className="fin-img-wrapper"><img onError={this.addDefaultSrc} alt={'Post from ' + d.username} className="fin-img" src={d.imageUrl}/></div>
                     <div className="fin-title">{d.title}</div>
                         <div className="stat-wrapper">
@@ -197,6 +206,7 @@ class User extends Component {
                             </span>
                         </div>
                     </div>)}
+                </Masonry>
               </div>
             
             </div>
