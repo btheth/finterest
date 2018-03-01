@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import Auth from '../../../modules/Auth';
 
 export default class FacebookLogin extends Component {
-  constructor(props, context) {
+  /**constructor(props, context) {
     super(props, context);
-  }
+  }**/
 
   componentDidMount() {
     document.addEventListener('FBObjectReady', this.initializeFacebookLogin);
@@ -35,7 +35,6 @@ export default class FacebookLogin extends Component {
    * Check login status and call login api is user is not logged in
    */
   facebookLogin = () => {
-    console.log(this.FB);
     if (!this.FB) {
       this.initializeFacebookLogin();
     }

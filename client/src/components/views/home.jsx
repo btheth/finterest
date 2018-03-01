@@ -126,7 +126,7 @@ class Home extends Component {
           if (xhr.status === 200) {
             // success
             //console.log(xhr.response)
-            
+
             this.getFins();
 
           } else {
@@ -165,7 +165,7 @@ class Home extends Component {
                     disableImagesLoaded={false} updateOnEachImageLoad={false}>
                   {this.state.fins.map((d,i) => 
                     <div className="image-element-class">
-                        {(Auth.isUserAuthenticated() && d.userId == Auth.getId())? 
+                        {(Auth.isUserAuthenticated() && d.userId === Auth.getId())? 
                         <div className="delete-btn-div"><button onClick={this.handleDeleteFin} data-id={i} className="delete-btn">&times;</button></div> : <div/>}
                         <div style={{"margin-top":"10px"}} className="fin-img-wrapper"><img onError={this.addDefaultSrc} alt={'Post from ' + d.username} className="fin-img" src={d.imageUrl}/></div>
                         <div className="fin-title">{d.title}</div>
