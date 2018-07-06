@@ -17,8 +17,11 @@ module.exports = new PassportLocalStrategy({
     username: username.trim(),
     password: password.trim(),
     email: req.body.email.trim(),
-    firstname: req.body.firstname.trim(),
-    lastname: req.body.lastname.trim()
+    firstname: req.body.firstname.trim().substring(0,1).toUpperCase() + req.body.firstname.trim().substring(1),
+    lastname: req.body.lastname.trim().substring(0,1).toUpperCase() + req.body.lastname.trim().substring(1),
+    orders: [],
+    cart: [],
+    type: "user"
   };
 
   const newUser = new User(userData);
@@ -31,7 +34,7 @@ module.exports = new PassportLocalStrategy({
       };
       
       // create a token string
-      const token = {token: jwt.sign(payload, process.env.JWTSECRET), id: newUser._id};
+      const token = {token: jwt.sign(payload, process.env.JWTSECRET),type:user.type};
 
       const data = {
         username: newUser.username

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Auth from '../../modules/Auth';
-import Header from './partials/header';
-//import FacebookLoginButton from './partials/FacebookLoginButton';
 
 class Login extends Component {
 	constructor(props, context) {
@@ -25,7 +23,6 @@ class Login extends Component {
     };
     this.processForm = this.processForm.bind(this);
     this.changeUser = this.changeUser.bind(this);
-    this.facebookError = this.facebookError.bind(this);
   }
 
   processForm(event) {
@@ -81,28 +78,9 @@ class Login extends Component {
     });
   }
 
-  facebookError() {
-    this.setState({
-      errors: {summary : "Facebook has blocked this site for content violations for some reason. " +
-      "I'm not going through the process to unblock it since this site was only built for learning purposes. " +
-      "You will have to create an account to continue. You can find the facebook login code on github if you are interested."}
-    })
-  }
-
-  onFacebookLogin = (loginStatus, resultObject) => {
-    if (loginStatus === true) {
-      this.setState({
-        username: resultObject.user.name
-      });
-    } else {
-      //alert('Facebook login error');
-    }
-  }
-
   render() {
     return (
-      <div id="body-wrapper">
-        <Header />
+      <div id="login-body-wrapper">
         <div id="login">
 
           <div id="title-div">
@@ -126,13 +104,6 @@ class Login extends Component {
 
               <button className="btn btn-success" type="submit">Submit</button>
             </form>
-
-             <div id="fb-login">
-              {/**<FacebookLoginButton history={this.props.history} onLogin={this.onFacebookLogin}>
-                <button className="btn btn-primary">Facebook Login</button>
-              </FacebookLoginButton>**/}
-              <button onClick={this.facebookError} className="btn btn-primary">Facebook Login</button>
-            </div>
 
             <div className="other-login-option">
               Need an account?

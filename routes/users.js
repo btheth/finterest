@@ -1,66 +1,135 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const User = require('mongoose').model('users');
-const Fin = require('mongoose').model('fins');
+const Bouquet = require('mongoose').model('bouquets');
 const router = express.Router();
 
 function isValid(str) { return /^\w+$/.test(str); }
 
-router.post('/userinfo', function(req, res, next) {
-	console.log('user info requested');
-	const userId = req.body.userId.trim();
+router.post('/cust/addbouquet', function(req, res, next) {
+	console.log('request to add bouquet to cart');
 
-	User.findOne({ _id: userId }, (err, user) => {
-		if (err) {res.status(400).json({errors:'user lookup failed'})};
-		res.status(200).json(user);
-	})
-});
+	const token = req.headers.authorization;
+	const bouquet = JSON.parse(req.body.bouquet);
 
-router.post('/finduser', function(req, res, next) {
-	console.log('user info requested');
-	const username = req.body.username.trim();
+    return jwt.verify(token, process.env.JWTSECRET, (err, decoded) => {
+    	if (err) {res.status(400).json({errors:'token decode failed'})};
 
-	User.findOne({ username : username }, (err, user) => {
-		if (err) {res.status(400).json({errors:'user lookup failed'})};
+	  	const userId = decoded.sub;
 
-		if (!user) {
-			res.status(400).json({errors:'User not found'})
-		} else {
-			res.status(200).json(user);
-		}
-	})
-});
+	  	User.findOne({ _id: userId }, (userErr, user) => {
+	  		if (err) {res.status(400).json({errors:'user lookup failed'})};
 
-router.post('/usersearch', function(req, res, next) {
-	console.log('user search requested');
-	const username = req.body.username.trim();
+	  		if (user.type !== "user") {res.status(401).json({errors:"unauthorized access"})};
 
-	if (!isValid(username)) {
-		res.status(400).json({errors:'No matching users found'});
-	} else {
-		User.find({ username : new RegExp(username, "i") }, { username: 1 }, (err, users) => {
-			if (err) {res.status(400).json({errors:'user lookup failed'})};
+	  		const bouquetData = {
+		  		userId: userId,
+	  			flowers: bouquet.flowers,
+	  			container: bouquet.container,
+	  			price: bouquet.price
+	  		}
 
-			if (users.length === 0) {
-				res.status(400).json({errors:'No matching users found'})
-			} else {
-				const userIds = users.map(d => d._id);
-				const results = users.map(d => ({_id:d._id, username:d.username,fins:[]}))
+	  		const newBouquet = new Bouquet(bouquetData);
 
-				Fin.find({ userId : {$in : userIds }}, (err, fins) => {
-					if (err) {res.status(400).json({errors:'fin lookup failed'})};
+	  		newBouquet.save((err) => {
+		   		if (err) {res.status(400).json({errors:'bouquet save failed'})};
+		      	
 
-					for (let i = 0; i < fins.length; i++){
-						for (let j = 0; j < results.length; j++) {
-							if (fins[i].userId == results[j]._id) {
-								results[j].fins.push(fins[i]);
-							}
-						}
-					}
-					res.status(200).json(results);
+		      	const newCart = user.cart.concat(newBouquet._id);
+
+		  		User.update({ _id: user}, {cart: newCart}, (err, user) => {
+		  			if (err) {res.status(400).json({errors:'user update failed'})};
+		  			res.status(200).end();
 				});
-			}
-		})
-	}
+	  		});
+  		});
+	});
+});
+
+router.post('/cust/editbouquet', function(req, res, next) {
+	console.log('request to edit bouquet in cart');
+
+	const token = req.headers.authorization;
+	const bouquet = JSON.parse(req.body.bouquet);
+
+    return jwt.verify(token, process.env.JWTSECRET, (err, decoded) => {
+    	if (err) {res.status(400).json({errors:'token decode failed'})};
+
+	  	const userId = decoded.sub;
+
+	  	User.findOne({ _id: userId }, (userErr, user) => {
+	  		if (err) {res.status(400).json({errors:'user lookup failed'})};
+
+	  		if (user.type !== "user") {res.status(401).json({errors:"unauthorized access"})};
+
+	  		Bouquet.update({ _id: bouquet.id}, {flowers: bouquet.flowers, container: bouquet.container, price: bouquet.price}, (err, user) => {
+	  			if (err) {res.status(400).json({errors:'user update failed'})};
+	  			res.status(200).end();
+			});
+  		});
+	});
+
+});	
+
+router.get('/cust/getcart/*', function(req, res, next) {
+	console.log("request for user's cart");
+
+	const token = req.url.split('/')[3];
+
+	return jwt.verify(token, process.env.JWTSECRET, (err, decoded) => {
+    	if (err) {res.status(400).json({errors:'token decode failed'})};
+
+	  	const userId = decoded.sub;
+
+	  	User.findOne({ _id: userId }, (userErr, user) => {
+	  		if (err) {res.status(400).json({errors:'user lookup failed'})};
+
+	  		let bouquetIds = [];
+
+	  		for (let i = 0; i < user.cart.length; i++) {
+	  			bouquetIds.push(user.cart[i]);
+	  		}
+
+	  		Bouquet.find({ _id : { $in : bouquetIds}}, (err, bouquets) => {
+	  			if (err) {res.status(400).json({errors:'bouquet lookup failed'})};
+	  			res.status(200).json(bouquets);
+	  		})
+  		});
+	});
+});
+
+router.delete('/cust/removefromcart/*', function(req, res, next) {
+	console.log("request to remove user's cart");
+
+	const bouquetId = req.url.split('/')[3];
+	const token = req.headers.authorization;
+
+	return jwt.verify(token, process.env.JWTSECRET, (err, decoded) => {
+    	if (err) {res.status(400).json({errors:'token decode failed'})};
+
+	  	const userId = decoded.sub;
+
+	  	User.findOne({ _id: userId }, (userErr, user) => {
+	  		if (err) {res.status(400).json({errors:'user lookup failed'})};
+
+	  		let bouquetIds = user.cart.map(d => d.toString());
+	  		const ind = bouquetIds.indexOf(bouquetId.toString());
+	  		bouquetIds.splice(ind,1);
+
+	  		User.update( {_id: userId}, {cart: bouquetIds}, (err, user) => {
+	  			if (err) {res.status(400).json({errors:'user update failed'})};
+
+	  			Bouquet.findOneAndRemove({_id: bouquetId}, (err) => {
+	  				if (err) {res.status(400).json({errors:'bouquet lookup failed'})};
+
+	  				Bouquet.find( { _id : { $in : bouquetIds}}, (err, bouquets) => {
+	  					if (err) {res.status(400).json({errors:'bouquet lookup failed'})};
+	  					res.status(200).json(bouquets);
+	  				})
+	  			})
+	  		})
+  		});
+	});
 });
 
 router.use('/', (req, res) => {

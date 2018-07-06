@@ -13,5 +13,8 @@ module.exports.connect = (uri) => {
 
   	// load models
   	require('./user');
-    require('./fin')
+    require('./flower');
+    require('./container');
+    require('./bouquet');
+    require('./order');
 };

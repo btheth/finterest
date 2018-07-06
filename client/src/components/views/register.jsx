@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Auth from '../../modules/Auth';
-import Header from './partials/header';
 
 class Register extends Component {
 	constructor(props, context) {
@@ -78,8 +77,7 @@ class Register extends Component {
 
   render() {
     return (
-      <div id="body-wrapper">
-      <Header />
+      <div id="login-body-wrapper">
         <div id="register">
 
           <div id="title-div">
@@ -132,7 +130,7 @@ class Register extends Component {
             </form>
 
             <div className="other-login-option">
-              Have an account with Finterest or Facebook?
+              Have an account?
               <br/>
               <Link to={'/login'}><button className="btn btn-info btn-sm" type='button'>Log In</button></Link>
             </div>

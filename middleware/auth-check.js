@@ -1,36 +1,43 @@
 const jwt = require('jsonwebtoken');
 const User = require('mongoose').model('users');
 
-
 /**
  *  The Auth Checker middleware function.
  */
 module.exports = (req, res, next) => {
-  
-  if (!req.headers.authorization && (req.url !== "/fins/recentfins" && req.url !== "/fins/userfins" 
-                                  && req.url !== "/users/finduser" && req.url !== "/users/usersearch")) {
+
+  if (!req.headers.authorization && (req.url.split('/')[2] === "cust" || req.url.split('/')[2] === "emp" || req.url.split('/')[2] === "admin")) {
     return res.status(401).json({error:"unauthorized access"});
-  } else if (req.url == "/fins/recentfins" || req.url == "/fins/userfins" || req.url == "/users/finduser" || req.url == "/users/usersearch") {
+  } else if (req.url.split('/')[2] === "cust" || req.url.split('/')[2] === "emp" || req.url.split('/')[2] === "admin") {
+    
+    const token = req.headers.authorization;
+
+    return jwt.verify(token, process.env.JWTSECRET, (err, decoded) => {
+      if (err) { return res.status(401).end(); }
+
+      const userId = decoded.sub;
+
+      return User.findById(userId, (userErr, user) => {
+        if (userErr || !user) {
+          return res.status(401).end();
+        }
+
+        const userType = user.type;
+
+        if (req.url.split('/')[2] === "emp" && userType !== "emp") {
+          return res.status(401).json({error:"unauthorized access"});
+        } else if (req.url.split('/')[2] === "admin" && userType !== "admin") {
+          return res.status(401).json({error:"unauthorized access"});
+        } else if (req.url.split('/')[2] === "cust" && userType !== "user") {
+          return res.status(401).json({error:"unauthorized access"});
+        }
+
+        return next();
+
+      });
+    });  
+
+  } else {
     return next();
   }
-
-  // get the last part from a authorization header string like "bearer token-value"
-  const token = req.headers.authorization.split(' ')[1];
-
-  // decode the token using a secret key-phrase
-  return jwt.verify(token, process.env.JWTSECRET, (err, decoded) => {
-    // the 401 code is for unauthorized status
-    if (err) { return res.status(401).end(); }
-
-    const userId = decoded.sub;
-
-    // check if a user exists
-    return User.findById(userId, (userErr, user) => {
-      if (userErr || !user) {
-        return res.status(401).end();
-      }
-
-      return next();
-    });
-  });
 };

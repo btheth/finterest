@@ -1,45 +1,25 @@
 class Auth {
 
-  /**
-   * Authenticate a user. Save a token string in Local Storage
-   *
-   * @param {string} token
-   */
   static authenticateUser(token) {
-    localStorage.setItem('finterest-token', JSON.stringify(token));
+    localStorage.setItem('bouquet-token', JSON.stringify(token));
   }
 
-  /**
-   * Check if a user is authenticated - check if a token is saved in Local Storage
-   *
-   * @returns {boolean}
-   */
   static isUserAuthenticated() {
-    return localStorage.getItem('finterest-token') !== null;
+    return localStorage.getItem('bouquet-token') !== null;
   }
 
-  /**
-   * Deauthenticate a user. Remove a token from Local Storage.
-   *
-   */
   static deauthenticateUser() {
-    localStorage.removeItem('finterest-token');
+    localStorage.removeItem('bouquet-token');
   }
-
-  /**
-   * Get a token value.
-   *
-   * @returns {string}
-   */
 
   static getToken() {
-    return JSON.parse(localStorage.getItem('finterest-token')).token;
+    return JSON.parse(localStorage.getItem('bouquet-token')).token;
   }
 
-  static getId() {
-    return JSON.parse(localStorage.getItem('finterest-token')).id;
+  static getType() {
+    return JSON.parse(localStorage.getItem('bouquet-token')).type;
   }
-
+  
 }
 
 export default Auth;

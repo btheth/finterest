@@ -14,7 +14,9 @@ const UserSchema = new mongoose.Schema({
   password: String,
   firstname: String,
   lastname: String,
-  fbId: String
+  type: String,
+  cart: Array,
+  orders: Array
 });
 
 

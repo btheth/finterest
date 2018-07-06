@@ -25,18 +25,27 @@ const localLoginStrategy = require('./passport/local-login');
 passport.use('local-signup', localSignupStrategy);
 passport.use('local-login', localLoginStrategy);
 
+//authentication for login/signup
 const auth = require('./routes/auth');
+app.use('/auth', auth);
+
+//load api routes
 const users = require('./routes/users');
-const fins = require('./routes/fins');
+const flowers = require('./routes/flowers');
+const containers = require('./routes/containers');
+const orders = require('./routes/orders');
 
 // pass the authenticaion checker middleware
 const authCheckMiddleware = require('./middleware/auth-check');
 app.use('/api', authCheckMiddleware);
 
-app.use('/auth', auth);
+//pass to appropriate routes
 app.use('/api/users', users);
-app.use('/api/fins', fins);
+app.use('/api/flowers', flowers);
+app.use('/api/containers', containers);
+app.use('/api/orders', orders);
 
+//default to send index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
